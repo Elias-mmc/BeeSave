@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ApplicationIcon>icono.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="icono.ico" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BundleToolsDirectory)' != ''">
+    <EmbeddedResource Include="$(BundleToolsDirectory)\gh.exe"
+                      LogicalName="MinecraftSaves.Bundle.gh.exe"
+                      Condition="Exists('$(BundleToolsDirectory)\gh.exe')" />
+    <EmbeddedResource Include="$(BundleToolsDirectory)\mingit.zip"
+                      LogicalName="MinecraftSaves.Bundle.mingit.zip"
+                      Condition="Exists('$(BundleToolsDirectory)\mingit.zip')" />
+  </ItemGroup>
+</Project>

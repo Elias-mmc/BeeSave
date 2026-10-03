@@ -1,0 +1,33 @@
+# Compilación y publicación de .NET
+bin/
+obj/
+.vs/
+TestResults/
+artifacts/
+
+# Ejecutable autocontenido: distribuirlo desde GitHub Releases
+/MinecraftSaves-Windows-x64.exe
+
+# Notas y memoria local del espacio de trabajo (no son documentación vigente)
+/files/
+/.verification/
+
+# Archivos locales del IDE y del sistema
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.DS_Store
+Thumbs.db
+
+# Configuración, credenciales y certificados locales
+.env
+.env.*
+!.env.example
+secrets.json
+*.pfx
+*.p12
+
+# Archivos temporales
+*.log
+*.tmp

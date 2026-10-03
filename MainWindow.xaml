@@ -1,0 +1,361 @@
+<Window x:Class="MinecraftSaves.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Minecraft Saves"
+        Icon="icono.ico"
+        Width="1020" Height="790"
+        MinWidth="760" MinHeight="650"
+        Background="#F4F7F0"
+        Foreground="#203329"
+        FontFamily="Segoe UI"
+        WindowStartupLocation="CenterScreen"
+        Opacity="0"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <SolidColorBrush x:Key="InkBrush" Color="#203329"/>
+        <SolidColorBrush x:Key="MutedBrush" Color="#6B7B70"/>
+        <SolidColorBrush x:Key="LeafBrush" Color="#347B4D"/>
+        <SolidColorBrush x:Key="CloudBrush" Color="#EEF3FA"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="18" ShadowDepth="3"
+                          Direction="270" Opacity="0.08" Color="#263A2E"/>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#347B4D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="17,12"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value><ScaleTransform/></Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}"
+                                CornerRadius="13" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.88"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                             To="1.035" Duration="0:0:0.12"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                             To="1.035" Duration="0:0:0.12"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                             To="1" Duration="0:0:0.12"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                             To="1" Duration="0:0:0.12"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.48"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="QuietButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#EAF1E9"/>
+            <Setter Property="Foreground" Value="#305B3B"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#F7F9F6"/>
+            <Setter Property="Foreground" Value="#203329"/>
+            <Setter Property="BorderBrush" Value="#DFE8DF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="11,9"/>
+            <Setter Property="CaretBrush" Value="#347B4D"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#52685A"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        </Style>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemSurface" Background="#F6F8F4"
+                                BorderBrush="#E7EDE5" BorderThickness="1" CornerRadius="14"
+                                Padding="13">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemSurface" Property="Background" Value="#EAF4E8"/>
+                                <Setter TargetName="ItemSurface" Property="BorderBrush" Value="#97C399"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemSurface" Property="BorderBrush" Value="#B2CFB4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="LocalWorldTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="11" Background="#E4F0DE"
+                        VerticalAlignment="Center" ClipToBounds="True">
+                    <Grid>
+                        <TextBlock Text="🌍" FontSize="18" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Image Source="{Binding Icon}" Stretch="UniformToFill"/>
+                    </Grid>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,6,0">
+                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold"
+                               TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding Status}" FontSize="11" Foreground="#738076" Margin="0,3,0,0"/>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="{Binding Badge}" Foreground="#397448"
+                           FontWeight="SemiBold" FontSize="11" VerticalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="CloudWorldTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="11" Background="#E8EDF7"
+                        VerticalAlignment="Center" ClipToBounds="True">
+                    <Grid>
+                        <TextBlock Text="☁" FontSize="20" Foreground="#54709A"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Image Source="{Binding Icon}" Stretch="UniformToFill"/>
+                    </Grid>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,6,0">
+                    <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold"
+                               TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding Status}" FontSize="11" Foreground="#738076" Margin="0,3,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Badge}" Foreground="#526A95"
+                               FontWeight="SemiBold" FontSize="10" VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+                    <Button Style="{StaticResource QuietButton}" Content="✕"
+                            ToolTip="Eliminar la copia actual de la nube (mantiene el historial)"
+                            AutomationProperties.Name="Eliminar copia de la nube"
+                            Padding="7,4" Margin="0" FontSize="11"
+                            Tag="{Binding Name}" Click="DeleteCloudWorldButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="26">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="52" Height="52" CornerRadius="17" Background="#DFF0D8" Margin="0,0,13,0">
+                    <TextBlock Text="⛏" FontSize="27" HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Minecraft Saves" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="Tus aventuras, cuidadas en la nube." FontSize="12"
+                               Foreground="{StaticResource MutedBrush}" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            <Button x:Name="MinimizeButton" Grid.Column="1" Style="{StaticResource QuietButton}"
+                    Content="⌄  Guardar en bandeja" VerticalAlignment="Center" Margin="0"
+                    Click="MinimizeButton_Click"/>
+        </Grid>
+
+        <Border Grid.Row="1" Background="#E6F2E2" CornerRadius="18" Padding="18,15"
+                Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Width="37" Height="37" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <Ellipse x:Name="StatusHalo" Fill="#BFE0B9" Opacity="0.7">
+                        <Ellipse.RenderTransform><ScaleTransform CenterX="18.5" CenterY="18.5"/></Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse x:Name="StatusIndicator" Width="12" Height="12" Fill="#7EAA66"
+                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock x:Name="StatusText" Text="Preparando tu aventura..." FontSize="14"
+                               FontWeight="Bold"/>
+                    <TextBlock x:Name="StatusDetails" Text="La app se quedará cerquita, en la bandeja."
+                               Foreground="#637665" FontSize="12" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                </StackPanel>
+                <Button x:Name="LoginButton" Grid.Column="2" Style="{StaticResource ActionButton}"
+                        Content="🔑  Conectar GitHub" VerticalAlignment="Center" Margin="10,0,0,0"
+                        Click="LoginButton_Click"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.05*"/>
+                <ColumnDefinition Width="0.95*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="White" CornerRadius="18" Padding="18"
+                    Margin="0,0,9,0" Effect="{StaticResource CardShadow}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="En este ordenador" FontSize="19" FontWeight="Bold"/>
+                            <TextBlock x:Name="LocalCountText" Text="Buscando mundos..." FontSize="12"
+                                       Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Style="{StaticResource QuietButton}"
+                                Content="📁  Ubicación" Margin="6,0,0,0"
+                                VerticalAlignment="Center" Click="BrowseButton_Click"/>
+                    </Grid>
+                    <ListBox x:Name="WorldsListBox" Grid.Row="1" ItemTemplate="{StaticResource LocalWorldTemplate}"
+                             SelectionChanged="WorldsListBox_SelectionChanged"/>
+                    <TextBlock x:Name="WorldDetailsText" Grid.Row="2"
+                               Text="Elige un mundo para guardarlo en tu nube privada."
+                               Foreground="{StaticResource MutedBrush}" FontSize="12"
+                               TextWrapping="Wrap" Margin="2,8,2,11"/>
+                    <Button x:Name="AddWorldButton" Grid.Row="3" Style="{StaticResource ActionButton}"
+                            Content="☁  Guardar este mundo" HorizontalAlignment="Left"
+                            Click="AddWorldButton_Click"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Background="White" CornerRadius="18" Padding="18"
+                    Margin="9,0,0,0" Effect="{StaticResource CardShadow}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Mundos en la nube" FontSize="19" FontWeight="Bold"/>
+                            <TextBlock x:Name="CloudCountText" Text="Tus copias privadas aparecerán aquí."
+                                       FontSize="12" Foreground="{StaticResource MutedBrush}"
+                                       TextWrapping="Wrap" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button x:Name="RefreshCloudButton" Grid.Column="1" Style="{StaticResource QuietButton}"
+                                Content="↻  Actualizar" Margin="6,0,0,0"
+                                VerticalAlignment="Center" Click="RefreshCloudButton_Click"/>
+                    </Grid>
+                    <ListBox x:Name="CloudWorldsListBox" Grid.Row="1"
+                             ItemTemplate="{StaticResource CloudWorldTemplate}"
+                             SelectionChanged="CloudWorldsListBox_SelectionChanged"/>
+                    <TextBlock x:Name="CloudWorldDetailsText" Grid.Row="2"
+                               Text="Conecta GitHub y tus copias te esperan aquí, incluso si borras un mundo del ordenador."
+                               Foreground="{StaticResource MutedBrush}" FontSize="12"
+                               TextWrapping="Wrap" Margin="2,8,2,11"/>
+                    <WrapPanel Grid.Row="3">
+                        <Button x:Name="RestoreWorldButton" Style="{StaticResource ActionButton}"
+                                Content="⬇  Traer este mundo al ordenador" HorizontalAlignment="Left"
+                                    IsEnabled="False"
+                                    Click="RestoreWorldButton_Click"/>
+                            <Button x:Name="DeleteCloudWorldButton" Style="{StaticResource QuietButton}"
+                                    Content="✕  Quitar de la nube" HorizontalAlignment="Left"
+                                    IsEnabled="False"
+                                    Click="DeleteCloudWorldButton_Click"/>
+                    </WrapPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Expander Grid.Row="3" Margin="2,14,2,0" Background="Transparent"
+                  Foreground="{StaticResource MutedBrush}">
+            <Expander.Header>
+                <TextBlock Text="⚙  Preferencias" FontWeight="SemiBold" FontSize="12"/>
+            </Expander.Header>
+            <Border Background="White" CornerRadius="14" Padding="15" Margin="0,8,0,0">
+                <StackPanel>
+                    <CheckBox x:Name="StartWithWindowsCheckBox"
+                              Content="Iniciar minimizada cuando enciendas Windows"/>
+                    <TextBlock x:Name="SettingsPathText" Text="Carpeta de mundos: ubicación predeterminada"
+                               Foreground="{StaticResource MutedBrush}" FontSize="11"
+                               TextWrapping="Wrap" Margin="0,10,0,0"/>
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Nombre del repositorio privado"
+                                   VerticalAlignment="Center" Margin="0,0,12,0" FontSize="12"/>
+                        <TextBox x:Name="RepositoryNameTextBox" Grid.Column="1" MaxLength="100"/>
+                        <Button x:Name="CreateRepositoryButton" Grid.Column="2"
+                                Style="{StaticResource QuietButton}" Content="Crear mi espacio privado"
+                                Margin="9,0,0,0" Click="CreateRepositoryButton_Click"/>
+                    </Grid>
+                    <TextBlock x:Name="GitHubStatusText" Text="Conecta GitHub para crear tu espacio privado."
+                               Foreground="{StaticResource MutedBrush}" FontSize="11" Margin="0,8,0,0"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </Expander>
+    </Grid>
+</Window>
